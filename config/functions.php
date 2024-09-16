@@ -8,8 +8,11 @@ function validateInput($input)
 {
     global $connect;
 
-    $result = mysqli_real_escape_string($connect, trim($input)); 
-    return $result;
+    if (is_array($input)) {
+        throw new InvalidArgumentException('Expected a string, but received an array.');
+    }
+
+    return mysqli_real_escape_string($connect, trim($input));
 }
 
 // To redirect from one page to another page
@@ -25,7 +28,7 @@ function alertMessage()
 {
     if (isset($_SESSION["status"])) {
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>' . htmlspecialchars($_SESSION["status"]) . '</strong>
+                <strong>' . htmlspecialchars($_SESSION["status"], ENT_QUOTES, 'UTF-8') . '</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>';
         unset($_SESSION["status"]);
@@ -40,7 +43,7 @@ function insert($tableName, $data)
     $table = validateInput($tableName);
 
     $columns = array_keys($data);
-    $values = array_map(function($value) use ($connect) {
+    $values = array_map(function ($value) use ($connect) {
         return "'" . mysqli_real_escape_string($connect, $value) . "'";
     }, array_values($data));
 
@@ -131,3 +134,18 @@ function delete($tableName, $id)
 
     return mysqli_query($connect, $query);
 }
+
+function checkParamsID($type)
+{
+    if (isset($_GET[$type])) {
+        if (isset($_GET[$type]) != "") {
+            return $_GET[$type];
+        } else {
+            echo "<h5>No ID Found in Params</h5>";
+        }
+
+    } else {
+        echo "<h5>No ID Found in Params</h5>";
+    }
+}
+?>
