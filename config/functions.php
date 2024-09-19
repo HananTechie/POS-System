@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 include_once "dbconn.php";  // Ensure this file initializes the $connect variable
 
@@ -148,4 +147,14 @@ function checkParamsID($type)
         echo "<h5>No ID Found in Params</h5>";
     }
 }
+
+function logoutSession() {
+    // Unset all session variables
+    session_start();
+    $_SESSION = [];
+    
+    // Destroy the session
+    session_destroy();
+}
+
 ?>

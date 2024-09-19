@@ -1,3 +1,4 @@
+<?php include("authentication.php") ?>
 <?php
 include("includes/header.php");
 include "../config/functions.php";
@@ -17,6 +18,14 @@ if (isset($_POST["updateAdmin"])) {
     $phonenumber = validateInput($_POST["phonenumber"]);
     $isban = isset($_POST["ban"]) ? 1 : 0;
 
+    $EmailCheckQuery = "SELECT * FROM admins WHERE email = '$email' AND id != '$$adminId'";
+    $checkResult = mysqli_query($connect, $EmailCheckQuery);
+
+    if($checkResult){
+        if(mysqli_num_rows($checkResult) > 0){
+            redirect("edit-admin.php?id=".$adminId, "Email is already used by another user!!");
+        }
+    }
     if ($password != "") {
         $password_hashed = password_hash($password, PASSWORD_BCRYPT);
     } else {

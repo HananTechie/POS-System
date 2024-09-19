@@ -1,3 +1,4 @@
+<?php include("authentication.php") ?>
 <?php
 include("../config/functions.php");
 
