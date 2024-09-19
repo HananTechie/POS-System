@@ -16,7 +16,7 @@ if (is_numeric($paraResultId)) {
             redirect("admins.php", "Something Went Wrong");
         }
     } else {
-        redirect("admins.php", admin["message"]);
+        redirect("admins.php", $admin["message"]);
     }
 } else {
     redirect("admins.php", "Something Went Wrong");
